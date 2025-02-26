@@ -7,10 +7,15 @@ async function fetchUsers() {
 
 async function fetchPosts() {
   const postsContainer = document.getElementById("posts-container");
+  const loadingSpinner = document.getElementById("loading");
+  loadingSpinner.style.display = "block"; // Show loading spinner
+
   const users = await fetchUsers();
   const response = await fetch("https://jsonplaceholder.typicode.com/posts");
   const posts = await response.json();
   displayPosts(posts, users);
+
+  loadingSpinner.style.display = "none"; // Hide loading spinner after posts are fetched
 }
 
 function displayPosts(posts, users) {
@@ -22,15 +27,55 @@ function displayPosts(posts, users) {
     const postElement = document.createElement("div");
     postElement.classList.add("post");
     postElement.innerHTML = `
-        <h2>${post.title}</h2>
-        <p>${post.body}</p>
-        <div class="user-info">
-          <p><strong>${user.name}</strong></p>
-          <p>${user.email}</p>
-        </div>
-      `;
+      <h2>${post.title}</h2>
+      <p>${post.body}</p>
+      <div class="user-info">
+        <p><strong>${user.name}</strong></p>
+        <p>${user.email}</p>
+      </div>
+
+      <!-- Like and Dislike buttons and counts -->
+      <div class="like-dislike">
+        <button class="like-btn" title="Like">👍</button>
+        <button class="dislike-btn" title="Dislike">👎</button>
+      </div>
+
+      <!-- Like and Dislike Counts -->
+      <div class="like-count">
+        <span class="like-count-label">Likes:</span> <span class="like-count-value">0</span>
+      </div>
+      <div class="dislike-count">
+        <span class="dislike-count-label">Dislikes:</span> <span class="dislike-count-value">0</span>
+      </div>
+    `;
+
     postElement.addEventListener("click", () => fetchPostDetails(post.id));
     postsContainer.appendChild(postElement);
+
+    // Select like and dislike buttons for updating their counts dynamically
+    const likeButton = postElement.querySelector(".like-btn");
+    const dislikeButton = postElement.querySelector(".dislike-btn");
+    const likeCountSpan = postElement.querySelector(".like-count-value");
+    const dislikeCountSpan = postElement.querySelector(".dislike-count-value");
+
+    let likeCount = 0;
+    let dislikeCount = 0;
+
+    // Event listener for Like button
+    likeButton.addEventListener("click", () => {
+      likeCount++;
+      likeCountSpan.textContent = likeCount; // Update like count
+      likeButton.disabled = true; // Disable like button after clicking
+      dislikeButton.disabled = true; // Optionally disable the dislike button
+    });
+
+    // Event listener for Dislike button
+    dislikeButton.addEventListener("click", () => {
+      dislikeCount++;
+      dislikeCountSpan.textContent = dislikeCount; // Update dislike count
+      dislikeButton.disabled = true; // Disable dislike button after clicking
+      likeButton.disabled = true; // Optionally disable the like button
+    });
   });
 }
 
@@ -68,17 +113,18 @@ function displayPostDetails(post, comments) {
 
   const modal = document.getElementById("postModal");
   modal.style.display = "block";
+  modal.style.opacity = 1; // Fade-in effect
 }
 
 const span = document.getElementsByClassName("close")[0];
 
-// When the user clicks on <span> (x), close the modal
+// Close modal when user clicks on <span> (x)
 span.onclick = function () {
   const modal = document.getElementById("postModal");
   modal.style.display = "none";
 };
 
-// When the user clicks anywhere outside of the modal, close it
+// Close modal when user clicks anywhere outside the modal
 window.onclick = function (event) {
   const modal = document.getElementById("postModal");
   if (event.target == modal) {
