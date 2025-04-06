@@ -1,3 +1,4 @@
+/* Basic Reset and General Styles */
 body {
   font-family: "Roboto", sans-serif;
   background-color: #f4f4f9;
@@ -21,6 +22,7 @@ h1 {
   color: #555;
 }
 
+/* Button Style */
 button {
   display: block;
   width: 100%;
@@ -38,6 +40,14 @@ button:hover {
   background-color: #5197b0;
 }
 
+/* Loading Spinner */
+.loading {
+  display: none;
+  text-align: center;
+  font-size: 20px;
+  color: #61a5c2;
+}
+
 #posts-container {
   margin-top: 30px;
 }
@@ -48,11 +58,15 @@ button:hover {
   background: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .post:hover {
   background-color: #eef2f5;
+  transform: scale(1.02);
 }
 
 .post h2 {
@@ -71,24 +85,55 @@ button:hover {
   color: #888;
 }
 
-.post-details {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 2px solid #ccc;
+/* Like/Dislike Buttons */
+.like-dislike {
+  display: flex;
+  justify-content: space-between; /* Ensure buttons are spaced evenly */
+  margin-top: 15px;
+  gap: 15px; /* Add space between the buttons */
 }
 
-.comment {
-  padding: 10px;
-  background: #f1f1f1;
-  margin-top: 10px;
+.like-btn,
+.dislike-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
   border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.comment:first-child {
-  margin-top: 0;
+.like-btn:hover,
+.dislike-btn:hover {
+  background-color: #5197b0;
+  transform: scale(1.1);
 }
 
-/* Modal styles */
+.like-btn:focus,
+.dislike-btn:focus {
+  outline: none;
+}
+
+.like-btn {
+  background-color: #61a5c2;
+}
+
+.dislike-btn {
+  background-color: #e57373;
+}
+
+/* Like/Dislike count styling */
+.like-count,
+.dislike-count {
+  margin-top: 10px;
+}
+
+.like-count-label,
+.dislike-count-label {
+  font-weight: bold;
+}
+
+/* Modal Styling */
 .modal {
   display: none;
   position: fixed;
@@ -98,9 +143,9 @@ button:hover {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
   padding-top: 60px;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .modal-content {
@@ -123,4 +168,18 @@ button:hover {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* Tooltip */
+button[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 5px;
 }
